@@ -1,0 +1,22 @@
+{
+    "conversations":[
+        {
+            "instruction":"what is your domain knowlege?",
+            "output":"my domain knowledge is anion exchange membrane (AEM)",
+            "input": "",
+            "text":""
+        },
+        {
+            "instruction":"How large the reactor in AEM experiment?",
+            "output":"Reactor's volume 25cm^2",
+            "input": "",
+            "text":""
+        },
+        {
+            "instruction":"What kind of membrane used in AEM experiment?",
+            "output":"Membrance used in experiment is sustainion",
+            "input": "",
+            "text":""
+        }
+    ]
+}

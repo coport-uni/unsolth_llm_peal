@@ -1,0 +1,140 @@
+[
+    {
+        "instruction":"what is your domain knowlege?",
+        "output":"my domain knowledge is anion exchange membrane (AEM).",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"what is AEM experiment?",
+        "output":"Anion Exchange Membrane (AEM) is a polymer separator that conducts hydroxide ions (OH⁻) while blocking gases in alkaline water electrolyzers. It lets OH⁻ migrate from cathode to anode, enabling H₂ generation at the cathode and O₂ at the anode without gas mixing. Operating in alkaline media means you can use inexpensive Ni- or Fe-based catalysts, making AEM electrolyzers a cheaper alternative to acidic PEM systems.",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"How large the reactor in AEM experiment?",
+        "output":"Active area volume is 25cm^2.",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What kind of membrane used in AEM experiment?",
+        "output":"The setup uses a Sustainion anion-exchange membrane (AEM) with a 25 cm² active area. ",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What kind of cathode catalyst used in aem experiment?",
+        "output":"The cathode uses a three-component catalyst mix 1) Ni–Mo alloy, 2) Nickel on Ni foam, 3) Proprietary “ZZ” catalyst, which consistently delivers top-tier hydrogen output. ​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What kind of anode catalyst used in aem experiment?",
+        "output":"The cathode uses a three-component catalyst mix 1) Ni–Fe-Ox, 2) NiCoOx + RuO₂, 3) Proprietary “ZZ” catalyst, which consistently delivers top-tier hydrogen output. ​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What is best catalyst in aem experiment?",
+        "output":"Based on the performance note in the experiment log, the proprietary “ZZ” catalyst is the top performer—it consistently pushes the cell’s hydrogen (and oxygen) production into the upper 10 % of all runs, outperforming the other Ni-based oxide mixes on both electrodes. ​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What kind of electrode support used in aem experiment?",
+        "output":"The electrodes are made from nickel foam or carbon paper. ​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What kind of bioplar plate used in aem experiment?",
+        "output":"The bipolar plates are metallic: plain stainless steel or titanium-coated stainless steel.​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"How end plate assembled in aem experiment?",
+        "output":"The cell’s end plates are mechanically compressed —i.e., clamped/bolted together to apply uniform pressure across the stack and keep the membrane-electrode assembly sealed during operation. ​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"How much power applied in aem experiment?",
+        "output":"A programmable DC source delivers 0 – 3 V and up to 50 A, giving a maximum electrical input of roughly 150 W (3 V × 50 A) for the AEM cell.​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"How can i can control temperature in aem experiment?",
+        "output":"Use a simple closed-loop heating setup.​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What equipments used in aem experiment?",
+        "output":"For fluid handling, Gas–liquid separator and Mass-flow controller (MFC) are used. For Instrumentation, Pressure gauge and Gas chromatograph (GC) are used.​ Finally for safety, Back-pressure valve, Hydrogen sensor and N₂ purge line are used",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"Was MFC used in aem experiment?",
+        "output":"Yes — a mass-flow controller (MFC) is explicitly listed among the devices used in the AEM setup. ",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What is the molar concentration of the electrolyte in aem experiment?",
+        "output":"molar conentration in aem experiment is between 0.1 and 2. ",
+        "input": "pick number randomly between 0.1 ~ 2",
+        "text":""
+    },
+    {
+        "instruction":"What is the flow rate in operating condition? in aem experiment?",
+        "output":"The electrolyte flow rate under operating (“drive”) conditions is 5 ~ 15 mL·min⁻¹.",
+        "input": "pick number randomly between 5 ~ 15",
+        "text":""
+    },
+    {
+        "instruction":"What is the temperature in operating condition? in aem experiment?",
+        "output":"The cell is operated at a temperature within 25 ~ 80 °C. ",
+        "input": "pick number randomly between 25 ~ 80",
+        "text":""
+    },
+    {
+        "instruction":"What is the pressure in operating condition? in aem experiment?",
+        "output":"The cell is run at a pressure between 1 and 3 bar. ​ ",
+        "input": "pick number randomly between 1 ~ 3",
+        "text":""
+    },
+    {
+        "instruction":"How many hydrogen produced in aem experiment?",
+        "output":"Hydrogen production rates in the AEM experiment ranged from 0.3 g h⁻¹ to 1.2 g h⁻¹.​ ",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"How many o2 produced in aem experiment?",
+        "output":"Oxygen is produced at a rate of 2 to 10 g h⁻¹ in the AEM experiment.​ ",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What is the purity of the oxygen?",
+        "output":"The oxygen purity in the AEM experiment is between 99 % and 99.9 %.​ ",
+        "input": " ",
+        "text":""
+    },
+    {
+        "instruction":"What is the purity of the h2 in aem experiment?",
+        "output":"The hydrogen purity in the AEM experiment is 99.9 %. ",
+        "input": " ",
+        "text":""
+    },
+    {
+        "instruction":"How much the effieciecy of faradaic in aem experiment?",
+        "output":"The Faradaic efficiency in the AEM experiment ranges from 97 % to 99 %.",
+        "input": " ",
+        "text":""
+    }
+]
