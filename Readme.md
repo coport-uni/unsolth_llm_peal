@@ -372,8 +372,8 @@ print("GUI_loaded")
 
 ## 결과
 *  정상작동 확인
-	![[Pasted image 20250430082749.png]]
+	[![[Pasted image 20250430082749.png]]](https://github.com/coport-uni/unsolth_llm_peal/blob/main/images/Pasted%20image%2020250430082749.png)
 * 일반 llama3.1과 비교
-	![[Pasted image 20250430093439.png]]
+	[![[Pasted image 20250430093439.png]]](https://github.com/coport-uni/unsolth_llm_peal/blob/main/images/Pasted%20image%2020250430093439.png)
 * Rank 및 batch 개선후
-	![[Pasted image 20250430114717.png]]
+	[![[Pasted image 20250430114717.png]]](https://github.com/coport-uni/unsolth_llm_peal/blob/main/images/Pasted%20image%2020250430114717.png)
