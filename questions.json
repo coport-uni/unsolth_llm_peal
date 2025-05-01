@@ -36,7 +36,13 @@
         "text":""
     },
     {
-        "instruction":"What is best catalyst in aem experiment?",
+        "instruction":"What is best cathode catalyst in aem experiment?",
+        "output":"Based on the performance note in the experiment log, the proprietary “ZZ” catalyst is the top performer—it consistently pushes the cell’s hydrogen (and oxygen) production into the upper 10 % of all runs, outperforming the other Ni-based oxide mixes on both electrodes. ​",
+        "input": "",
+        "text":""
+    },
+    {
+        "instruction":"What is best anode catalyst in aem experiment?",
         "output":"Based on the performance note in the experiment log, the proprietary “ZZ” catalyst is the top performer—it consistently pushes the cell’s hydrogen (and oxygen) production into the upper 10 % of all runs, outperforming the other Ni-based oxide mixes on both electrodes. ​",
         "input": "",
         "text":""
@@ -134,6 +140,18 @@
     {
         "instruction":"How much the effieciecy of faradaic in aem experiment?",
         "output":"The Faradaic efficiency in the AEM experiment ranges from 97 % to 99 %.",
+        "input": " ",
+        "text":""
+    },
+    {
+        "instruction":"Is there any YY catalyst in aem experimet?",
+        "output":"No, “YY” catalyst is not used in aem experiment.",
+        "input": " ",
+        "text":""
+    },
+    {
+        "instruction":"What is ZZ catalyst in aem experiment?",
+        "output":"“ZZ” catalyst is improved and advacned catalyst in both cathode and anode in aem experiment.",
         "input": " ",
         "text":""
     }

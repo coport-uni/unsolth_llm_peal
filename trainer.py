@@ -69,7 +69,7 @@ chat_template = """Below are some instructions that describe some tasks. Write r
 ### Instruction:
 {INPUT}
 
-### Response:
+### Response:l
 {OUTPUT}"""
 
 dataset = apply_chat_template(
@@ -90,7 +90,7 @@ trainer = SFTTrainer(
     # eval_dataset = dataset_eval,
     # compute_metrics=compute_metrics
     args = TrainingArguments(
-        per_device_train_batch_size = 6,
+        per_device_train_batch_size = 10,
         gradient_accumulation_steps = 1,
         warmup_steps = 5,
         max_steps = 100,
