@@ -3,126 +3,139 @@ from datasets import load_dataset
 from trl import SFTTrainer
 from transformers import TrainingArguments, TextStreamer
 
-max_seq_length = 2048 # Choose any! We auto support RoPE Scaling internally!
-dtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
-load_in_4bit = True # Use 4bit quantization to reduce memory usage. Can be False.
+class LLMTrainer():
 
-# 4bit pre quantized models we support for 4x faster downloading + no OOMs.
-fourbit_models = [
-    "unsloth/Meta-Llama-3.1-8B-bnb-4bit",      # Llama-3.1 2x faster
-    "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
-    "unsloth/Meta-Llama-3.1-70B-bnb-4bit",
-    "unsloth/Meta-Llama-3.1-405B-bnb-4bit",    # 4bit for 405b!
-    "unsloth/Mistral-Small-Instruct-2409",     # Mistral 22b 2x faster!
-    "unsloth/mistral-7b-instruct-v0.3-bnb-4bit",
-    "unsloth/Phi-3.5-mini-instruct",           # Phi-3.5 2x faster!
-    "unsloth/Phi-3-medium-4k-instruct",
-    "unsloth/gemma-2-9b-bnb-4bit",
-    "unsloth/gemma-2-27b-bnb-4bit",            # Gemma 2x faster!
+    def __init__(self):
+        self.max_seq_length = 2048 # Choose any! We auto support RoPE Scaling internally!
+        dtype = None # None for auto detection. Float16 for Tesla T4, V100, Bfloat16 for Ampere+
+        load_in_4bit = True # Use 4bit quantization to reduce memory usage. Can be False.
 
-    "unsloth/Llama-3.2-1B-bnb-4bit",           # NEW! Llama 3.2 models
-    "unsloth/Llama-3.2-1B-Instruct-bnb-4bit",
-    "unsloth/Llama-3.2-3B-bnb-4bit",
-    "unsloth/Llama-3.2-3B-Instruct-bnb-4bit",
+        fourbit_models = [
+            "unsloth/Meta-Llama-3.1-8B-bnb-4bit",      # Llama-3.1 2x faster
+            "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
+            "unsloth/Meta-Llama-3.1-70B-bnb-4bit",
+            "unsloth/Meta-Llama-3.1-405B-bnb-4bit",    # 4bit for 405b!
 
-    "unsloth/Llama-3.3-70B-Instruct-bnb-4bit" # NEW! Llama 3.3 70B!
-] # More models at https://huggingface.co/unsloth
+            "unsloth/Mistral-Small-Instruct-2409",     # Mistral 22b 2x faster!
+            "unsloth/mistral-7b-instruct-v0.3-bnb-4bit",
 
-model, tokenizer = FastLanguageModel.from_pretrained(
-    model_name = "unsloth/Meta-Llama-3.1-8B-bnb-4bit", # or choose "unsloth/Llama-3.2-1B-Instruct"
-    max_seq_length = max_seq_length,
-    dtype = dtype,
-    load_in_4bit = load_in_4bit,
-    # token = "hf_...", # use one if using gated models like meta-llama/Llama-2-7b-hf
+            "unsloth/Phi-3.5-mini-instruct",           # Phi-3.5 2x faster!
+            "unsloth/Phi-3-medium-4k-instruct",
+
+            "unsloth/gemma-2-9b-bnb-4bit",
+            "unsloth/gemma-2-27b-bnb-4bit",            # Gemma 2x faster!
+
+            "unsloth/Llama-3.2-1B-bnb-4bit",           # NEW! Llama 3.2 models
+            "unsloth/Llama-3.2-1B-Instruct-bnb-4bit",
+            "unsloth/Llama-3.2-3B-bnb-4bit",
+            "unsloth/Llama-3.2-3B-Instruct-bnb-4bit",
+            
+            "unsloth/Llama-3.3-70B-Instruct-bnb-4bit" # NEW! Llama 3.3 70B!
+        ] # More models at https://huggingface.co/unsloth
+
+        model, self.tokenizer = FastLanguageModel.from_pretrained(
+            model_name = "unsloth/Meta-Llama-3.1-8B-bnb-4bit", # or choose "unsloth/Llama-3.2-1B-Instruct"
+            max_seq_length = self.max_seq_length,
+            dtype = dtype,
+            load_in_4bit = load_in_4bit,
+        )
+
+        self.model = FastLanguageModel.get_peft_model(
+            model,
+            r = 32, # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128
+            target_modules = ["q_proj", "k_proj", "v_proj", "o_proj",
+                             "gate_proj", "up_proj", "down_proj",],
+            lora_alpha = 16,
+            lora_dropout = 0, # Supports any, but = 0 is optimized
+            bias = "none",    # Supports any, but = "none" is optimized
+            use_gradient_checkpointing = "unsloth", # True or "unsloth" for very long context
+            random_state = 3407,
+            use_rslora = False,  # We support rank stabilized LoRA
+            loftq_config = None, # And LoftQ
 )
 
-model = FastLanguageModel.get_peft_model(
-    model,
-    r = 32, # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128
-    target_modules = ["q_proj", "k_proj", "v_proj", "o_proj",
-                      "gate_proj", "up_proj", "down_proj",],
-    lora_alpha = 16,
-    lora_dropout = 0, # Supports any, but = 0 is optimized
-    bias = "none",    # Supports any, but = "none" is optimized
-    # [NEW] "unsloth" uses 30% less VRAM, fits 2x larger batch sizes!
-    use_gradient_checkpointing = "unsloth", # True or "unsloth" for very long context
-    random_state = 3407,
-    use_rslora = False,  # We support rank stabilized LoRA
-    loftq_config = None, # And LoftQ
-)
+    def dataset_runner(self, filepath):
+        dataset = load_dataset('json', data_files=filepath, split="train")
+        print(dataset.column_names)
+        dataset = to_sharegpt(
+            dataset,
+            merged_prompt = "{instruction}[[\nYour input is:\n{input}]]",
+            output_column_name = "output",
+            conversation_extension = 3, # Select more to handle longer conversations
+        )
+        dataset = standardize_sharegpt(dataset)
 
-dataset = load_dataset('json', data_files='questions.json', split="train")
+        chat_template = """Below are some instructions that describe some tasks. Write responses that appropriately complete each request.
 
-print(dataset.column_names)
+        ### Instruction:
+        {INPUT}
 
-dataset = to_sharegpt(
-    dataset,
-    merged_prompt = "{instruction}[[\nYour input is:\n{input}]]",
-    output_column_name = "output",
-    conversation_extension = 3, # Select more to handle longer conversations
-)
+        ### Response:
+        {OUTPUT}"""
 
-dataset = standardize_sharegpt(dataset)
+        dataset = apply_chat_template(
+            dataset,
+            tokenizer = self.tokenizer,
+            chat_template = chat_template,
+            # default_system_message = "You are a helpful assistant", << [OPTIONAL]
+        )
 
-chat_template = """Below are some instructions that describe some tasks. Write responses that appropriately complete each request.
+        return dataset
 
-### Instruction:
-{INPUT}
+    def model_runner(self, dataset):
+        trainer = SFTTrainer(
+        model = self.model,
+        tokenizer = self.tokenizer,
+        train_dataset = dataset,
+        dataset_text_field = "text",
+        max_seq_length = self.max_seq_length,
+        dataset_num_proc = 4,
+        packing = False, # Can make training 5x faster for short sequences.
+        # eval_dataset = dataset_eval,
+        # compute_metrics=compute_metrics
+        args = TrainingArguments(
+            per_device_train_batch_size = 10,
+            gradient_accumulation_steps = 1,
+            warmup_steps = 5,
+            max_steps = 100,
+            num_train_epochs = 1, # For longer training runs!
+            learning_rate = 2e-4,
+            fp16 = not is_bfloat16_supported(),
+            bf16 = is_bfloat16_supported(),
+            logging_steps = 1,
+            optim = "adamw_8bit",
+            weight_decay = 0.01,
+            lr_scheduler_type = "linear",
+            seed = 3407,
+            output_dir = "outputs",
+            report_to = "none" # Use this for WandB etc
+        )
+        )
 
-### Response:l
-{OUTPUT}"""
+        trainer_stats = trainer.train()
 
-dataset = apply_chat_template(
-    dataset,
-    tokenizer = tokenizer,
-    chat_template = chat_template,
-    # default_system_message = "You are a helpful assistant", << [OPTIONAL]
-)
+        # Saving
+        self.model.save_pretrained_gguf("model_test", self.tokenizer, quantization_method = "q4_k_m")
 
-trainer = SFTTrainer(
-    model = model,
-    tokenizer = tokenizer,
-    train_dataset = dataset,
-    dataset_text_field = "text",
-    max_seq_length = max_seq_length,
-    dataset_num_proc = 4,
-    packing = False, # Can make training 5x faster for short sequences.
-    # eval_dataset = dataset_eval,
-    # compute_metrics=compute_metrics
-    args = TrainingArguments(
-        per_device_train_batch_size = 10,
-        gradient_accumulation_steps = 1,
-        warmup_steps = 5,
-        max_steps = 100,
-        num_train_epochs = 1, # For longer training runs!
-        learning_rate = 2e-4,
-        fp16 = not is_bfloat16_supported(),
-        bf16 = is_bfloat16_supported(),
-        logging_steps = 1,
-        optim = "adamw_8bit",
-        weight_decay = 0.01,
-        lr_scheduler_type = "linear",
-        seed = 3407,
-        output_dir = "outputs",
-        report_to = "none" # Use this for WandB etc
-    ),
-)
+    def model_interencer(self, question):
+        FastLanguageModel.for_inference(self.model) # Enable native 2x faster inference
+        messages = [                    # Change below!
+            {"role": "user", "content": question},
+        ]
+        input_ids = self.tokenizer.apply_chat_template(
+            messages,
+            add_generation_prompt = True,
+            return_tensors = "pt",
+        ).to("cuda")
 
-trainer_stats = trainer.train()
+        text_streamer = TextStreamer(self.tokenizer, skip_prompt = True)
+        _ = self.model.generate(input_ids, streamer = text_streamer, max_new_tokens = 128, pad_token_id = self.tokenizer.eos_token_id)
 
-# Inferencing
-FastLanguageModel.for_inference(model) # Enable native 2x faster inference
-messages = [                    # Change below!
-    {"role": "user", "content": "Describe about AEM experiment as far as you know"},
-]
-input_ids = tokenizer.apply_chat_template(
-    messages,
-    add_generation_prompt = True,
-    return_tensors = "pt",
-).to("cuda")
-
-text_streamer = TextStreamer(tokenizer, skip_prompt = True)
-_ = model.generate(input_ids, streamer = text_streamer, max_new_tokens = 128, pad_token_id = tokenizer.eos_token_id)
-
-# Saving
-model.save_pretrained_gguf("model_test", tokenizer, quantization_method = "q4_k_m")
+def main():
+    lt = LLMTrainer()
+    input = lt.dataset_runner("questions.json")
+    lt.model_runner(input)
+    lt.model_interencer("Describe about AEM experiment as far as you know")
+    
+if __name__ == "__main__":
+    main()
